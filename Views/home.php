@@ -39,6 +39,22 @@ $view_tweets = [
 ////////////////////////////////////////
 
 /**
+ * 画像ファイル名から画像のURLを生成する
+ * 
+ * @param string $name 画像ファイル名
+ * @param string $type user | tweet
+ * @return string
+ */
+function buildImagePath(string $name = null, string $type)
+{
+    if ($type === 'user' && !isset($name)){
+        return HOME_URL . 'Views/img/icon-default-user.svg';
+    }
+
+    return HOME_URL . 'Views/img_uploaded/' . '/' . htmlspecialchars($name);
+}
+
+/**
  * 指定した日時からどれだけ経過したかを取得
  * 
  * @param string $datetime 日時
@@ -140,15 +156,15 @@ function convertToDayTimeAgo(string $datetime)
                     <?php foreach ($view_tweets as $view_tweet) : ?>
                         <div class="tweet">
                             <div class="user">
-                                <a href="profile.php?user_id=<?php echo $view_tweet['use_id']; ?>">
-                                    <img src="<?php echo HOME_URL; ?>Views/img_uploaded/user/<?php echo $view_tweet['user_image_name']; ?>" alt="">
+                                <a href="profile.php?user_id=<?php echo htmlspecialchars($view_tweet['use_id']); ?>">
+                                    <img src="<?php echo buildImagePath($view_tweet['user_image_name'], 'user'); ?>" alt="">
                                 </a>
                             </div>
                             <div class="content">
                                 <div class="name">
-                                    <a href="profile.php?user_id=<?php echo $view_tweet['use_id']; ?>">
-                                        <span class="nickname"><?php echo $view_tweet['user_nickname']; ?></span>
-                                        <span class="user-name">@<?php echo $view_tweet['user_name']; ?> ・<?php echo convertToDayTimeAgo($view_tweet['tweet_created_at']); ?></span>
+                                    <a href="profile.php?user_id=<?php echo htmlspecialchars($view_tweet['use_id']); ?>">
+                                        <span class="nickname"><?php echo htmlspecialchars($view_tweet['user_nickname']); ?></span>
+                                        <span class="user-name">@<?php echo htmlspecialchars($view_tweet['user_name']); ?> ・<?php echo convertToDayTimeAgo($view_tweet['tweet_created_at']); ?></span>
                                     </a>
                                 </div>
                                 <p><?php echo $view_tweet['tweet_body']; ?></p>
@@ -169,7 +185,7 @@ function convertToDayTimeAgo(string $datetime)
                                         }
                                         ?>
                                     </div>
-                                    <div class="like-count"><?php echo $view_tweet['like_count']; ?></div>
+                                    <div class="like-count"><?php echo htmlspecialchars($view_tweet['like_count']); ?></div>
                                 </div>
                             </div>
                         </div>
