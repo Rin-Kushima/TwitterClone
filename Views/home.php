@@ -34,8 +34,47 @@ $view_tweets = [
     ]
 ];
 
-?>
+////////////////////////////////////////
+// 便利な関数
+////////////////////////////////////////
 
+/**
+ * 指定した日時からどれだけ経過したかを取得
+ * 
+ * @param string $datetime 日時
+ * @return string
+ */
+function convertToDayTimeAgo(string $datetime)
+{
+    $unix = strtotime($datetime);
+    $now = time();
+    $diff_sec = $now - $unix;
+
+    if ($diff_sec < 60) {
+        $time = $diff_sec;
+        $unit = '秒前';
+    } elseif ($diff_sec < 3600) {
+        $time = $diff_sec / 60;
+        $unit = '分前';
+    } elseif ($diff_sec < 86400) {
+        $time = $diff_sec / 3600;
+        $unit = '時間前';
+    } elseif ($diff_sec < 2764800) {
+        $time = $diff_sec / 86400;
+        $unit = '日前';
+    } else {
+        if (date('Y') !== date('Y', $unix)) {
+            $time = date('Y年n月j日', $unix);
+        } else {
+            $time = date('n月j日', $unix);
+        }
+        return $time;
+    }
+
+    return (int)$time . $unit;
+}
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -109,7 +148,7 @@ $view_tweets = [
                                 <div class="name">
                                     <a href="profile.php?user_id=<?php echo $view_tweet['use_id']; ?>">
                                         <span class="nickname"><?php echo $view_tweet['user_nickname']; ?></span>
-                                        <span class="user-name">@<?php echo $view_tweet['user_name']; ?> ・<?php echo $view_tweet['tweet_created_at']; ?></span>
+                                        <span class="user-name">@<?php echo $view_tweet['user_name']; ?> ・<?php echo convertToDayTimeAgo($view_tweet['tweet_created_at']); ?></span>
                                     </a>
                                 </div>
                                 <p><?php echo $view_tweet['tweet_body']; ?></p>
