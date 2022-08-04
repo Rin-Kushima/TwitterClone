@@ -55,4 +55,3 @@
     
         return (int)$time . $unit;
     }
-    
