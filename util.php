@@ -25,33 +25,67 @@
         * @param string $datetime 日時
         * @return string
         */
-    function convertToDayTimeAgo(string $datetime)
-    {
-        $unix = strtotime($datetime);
-        $now = time();
-        $diff_sec = $now - $unix;
-    
-        if ($diff_sec < 60) {
-            $time = $diff_sec;
-            $unit = '秒前';
-        } elseif ($diff_sec < 3600) {
-            $time = $diff_sec / 60;
-            $unit = '分前';
-        } elseif ($diff_sec < 86400) {
-            $time = $diff_sec / 3600;
-            $unit = '時間前';
-        } elseif ($diff_sec < 2764800) {
-            $time = $diff_sec / 86400;
-            $unit = '日前';
+function convertToDayTimeAgo(string $datetime)
+{
+    $unix = strtotime($datetime);
+    $now = time();
+    $diff_sec = $now - $unix;
+
+    if ($diff_sec < 60) {
+        $time = $diff_sec;
+        $unit = '秒前';
+    } elseif ($diff_sec < 3600) {
+        $time = $diff_sec / 60;
+        $unit = '分前';
+    } elseif ($diff_sec < 86400) {
+        $time = $diff_sec / 3600;
+        $unit = '時間前';
+    } elseif ($diff_sec < 2764800) {
+        $time = $diff_sec / 86400;
+        $unit = '日前';
+    } else {
+
+        if (date('Y') !== date('Y', $unix)) {
+            $time = date('Y年n月j日', $unix);
         } else {
-    
-            if (date('Y') !== date('Y', $unix)) {
-                $time = date('Y年n月j日', $unix);
-            } else {
-                $time = date('n月j日', $unix);
-            }
-            return $time;
+            $time = date('n月j日', $unix);
         }
-    
-        return (int)$time . $unit;
+        return $time;
     }
+
+    return (int)$time . $unit;
+}
+
+/**
+     * ユーザー情報をセッションに保存
+     * 
+     * @param array $user
+     * @return void
+     */
+function saveUserSession(array $user)
+{
+    // セッションを開始していない場合
+    if (session_status() === PHP_SESSION_NONE) {
+        // セッション開始
+        session_start();
+    }
+
+    $_SESSION['USER'] = $user;
+}
+
+/**
+     * ユーザー情報をセッションから削除
+     * 
+     * @return void
+     */
+function deleteUserSession(array $user)
+{
+    // セッションを開始していない場合
+    if (session_status() === PHP_SESSION_NONE) {
+        // セッション開始
+        session_start();
+    }
+
+    // セッションのユーザー情報を削除
+    unset($_SESSION['USER']);
+}
