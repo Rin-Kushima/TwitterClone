@@ -10,12 +10,11 @@
 <body class="home">
     <div class="container">
         <?php include_once('../Views/common/side.php'); ?>
+
         <div class="main">
             <div class="main-header">
                 <h1>ホーム</h1>
             </div>
-
-            <!-- つぶやき投稿エリア -->
             <div class="tweet-post">
                 <div class="my-icon">
                     <img src="<?php echo htmlspecialchars($view_user['image_path']); ?>" alt="">
@@ -33,10 +32,8 @@
                 </div>
             </div>
 
-            <!-- 仕切りエリア -->
             <div class="ditch"></div>
 
-            <!-- つぶやき一覧エリア -->
             <?php if (empty($view_tweets)) : ?>
                 <p class="p-3">ツイートがありません</p>
             <?php else : ?>
@@ -48,6 +45,7 @@
             <?php endif; ?>
         </div>
     </div>
+    
     <?php include_once('../Views/common/foot.php'); ?>
 </body>
 

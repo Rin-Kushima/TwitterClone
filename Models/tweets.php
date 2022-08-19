@@ -76,7 +76,7 @@ function findTweets(array $user)
             tweets AS T
             -- ユーザーテーブルを紐付ける
             JOIN
-            users AS U ON U .id = T.user_id AND U.status = 'active'
+            users AS U ON U.id = T.user_id AND U.status = 'active'
             -- いいね！テーブルを紐付ける
             LEFT JOIN
             likes AS L ON L.tweet_id = T.id AND L.status = 'active' AND L.user_id = '$login_user_id'
